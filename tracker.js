@@ -89,25 +89,30 @@ export function initTracker({ container, onChange, onOpen }) {
   container.setAttribute('aria-labelledby', heading.id);
   container.replaceChildren(bar, note, stageBar, list, board, empty, feedback);
 
+  function normalizeList(parsed) {
+    if (!Array.isArray(parsed)) return [];
+    const unique = new Set();
+    return parsed.flatMap(record => {
+      const job = normalizeJob(record?.job);
+      if (!job || unique.has(job.id)) return [];
+      unique.add(job.id);
+      return [
+        {
+          job,
+          status: STATUSES.includes(record.status) ? record.status : 'Saved',
+          followUp: /^\d{4}-\d{2}-\d{2}$/.test(record.followUp) ? record.followUp : '',
+          notes: typeof record.notes === 'string' ? record.notes.slice(0, 400) : '',
+        },
+      ];
+    });
+  }
+
   function reload() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       const parsed = raw ? JSON.parse(raw) : [];
       if (!Array.isArray(parsed)) return;
-      const unique = new Set();
-      entries = parsed.flatMap(record => {
-        const job = normalizeJob(record?.job);
-        if (!job || unique.has(job.id)) return [];
-        unique.add(job.id);
-        return [
-          {
-            job,
-            status: STATUSES.includes(record.status) ? record.status : 'Saved',
-            followUp: /^\d{4}-\d{2}-\d{2}$/.test(record.followUp) ? record.followUp : '',
-            notes: typeof record.notes === 'string' ? record.notes.slice(0, 400) : '',
-          },
-        ];
-      });
+      entries = normalizeList(parsed);
     } catch {
       canPersist = false;
     }
@@ -389,6 +394,21 @@ export function initTracker({ container, onChange, onOpen }) {
     isSaved(job) {
       const id = String(job?.id ?? job ?? '').trim();
       return entries.some(entry => entry.job.id === id);
+    },
+    replaceAll(nextEntries, { silent = true } = {}) {
+      entries = normalizeList(nextEntries);
+      if (canPersist) {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+        } catch {
+          canPersist = false;
+        }
+      }
+      render();
+      updateSummary();
+      renderStageBar();
+      feedback.textContent = '';
+      if (!silent) onChange?.(snapshot());
     },
     list: snapshot,
     getCounts: countsByStage,
