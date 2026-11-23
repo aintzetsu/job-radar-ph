@@ -1,0 +1,222 @@
+/* Topbar Account Pill & Gmail OTP Account Dialog */
+.account-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 36px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line-subtle);
+  background: var(--surface-1);
+  color: var(--ink);
+  font-size: 0.82rem;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.account-pill:hover {
+  border-color: var(--mint);
+}
+
+.account-pill.is-signed-in {
+  border-color: rgba(168, 245, 126, 0.36);
+  background: var(--mint-soft);
+  color: var(--mint);
+}
+
+.account-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--muted);
+  flex: none;
+}
+
+.account-pill.is-signed-in .account-dot {
+  background: var(--mint);
+  box-shadow: 0 0 8px rgba(168, 245, 126, 0.65);
+}
+
+.account-dialog {
+  width: min(500px, calc(100% - 24px));
+  max-height: 90dvh;
+  padding: 22px;
+  background: var(--panel);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.55);
+}
+
+.account-dialog::backdrop {
+  background: rgb(4 10 9 / 0.78);
+  backdrop-filter: blur(6px);
+}
+
+.account-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.account-head h2 {
+  font-size: 1.24rem;
+}
+
+.account-head p {
+  font-size: 0.85rem;
+  margin-top: 4px;
+}
+
+.account-stack {
+  display: grid;
+  gap: 14px;
+}
+
+.account-stack[hidden] {
+  display: none;
+}
+
+.account-banner {
+  padding: 11px 13px;
+  border-radius: 12px;
+  background: var(--surface-1);
+  border: 1px solid var(--line-subtle);
+  font-size: 0.84rem;
+  color: var(--muted);
+}
+
+.account-banner strong {
+  color: var(--ink);
+}
+
+.account-banner.is-warn {
+  border-color: rgba(246, 196, 106, 0.38);
+  background: var(--amber-soft);
+  color: var(--amber);
+}
+
+.account-field {
+  display: grid;
+  gap: 6px;
+  font-size: 0.84rem;
+  font-weight: 650;
+}
+
+.otp-code-input {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 1.55rem;
+  font-weight: 700;
+  letter-spacing: 0.34em;
+  padding: 10px 14px;
+}
+
+.account-inline-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.account-status-msg {
+  min-height: 1.2em;
+  font-size: 0.84rem;
+  color: var(--muted);
+}
+
+.account-status-msg.is-error {
+  color: #ffb8b8;
+}
+
+.account-status-msg.is-success {
+  color: var(--mint);
+}
+
+.account-profile-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--surface-1);
+  border: 1px solid var(--line-subtle);
+}
+
+.account-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: var(--mint-soft);
+  color: var(--mint);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.95rem;
+  flex: none;
+}
+
+.account-profile-meta {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.account-profile-meta strong {
+  font-size: 0.96rem;
+  overflow-wrap: anywhere;
+}
+
+.account-profile-meta span {
+  font-size: 0.8rem;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.account-sync-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.account-sync-tile {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--surface-1);
+  border: 1px solid var(--line-subtle);
+  display: grid;
+  gap: 2px;
+}
+
+.account-sync-tile span {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+
+.account-sync-tile strong {
+  font-size: 0.9rem;
+}
+
+.account-name-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: end;
+}
+
+@media (max-width: 520px) {
+  .account-pill {
+    padding: 4px 10px;
+    font-size: 0.78rem;
+  }
+  .account-sync-summary,
+  .account-name-row {
+    grid-template-columns: 1fr;
+  }
+}
