@@ -1,5 +1,6 @@
 import {initBoards} from './boards.js';
 import {initTracker} from './tracker.js';
+import {initResumeImport} from './resume-import.js';
 import {initApplication} from './application.js';
 import {externalUrl,feeds,loadFeed,resumeProfile,selectJobs} from './jobs.js';
 
@@ -102,8 +103,13 @@ function useResume() {
   sort.value = 'match';
   resetResults();
 }
+const resumeImport = initResumeImport({
+  input:byId('resume-file'),status:byId('resume-file-status'),
+  field:resumeField,matchButton:byId('use-resume'),
+});
 byId('use-resume').addEventListener('click',useResume);
 byId('clear-resume').addEventListener('click',()=>{
+  resumeImport.clear();
   resumeField.value = resumeText = '';
   profile = null;
   writeLocal(resumeKey,'');

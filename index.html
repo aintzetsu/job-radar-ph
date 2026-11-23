@@ -45,6 +45,10 @@ form,.card{background:var(--panel);border:1px solid var(--line);border-radius:16
 <details class="resume-panel" id="resume-panel">
   <summary><span>Match jobs to my résumé</span><span class="resume-badge" id="resume-badge">Add résumé</span></summary>
   <div class="resume-body">
+    <label for="resume-file">Import a résumé file</label>
+    <input id="resume-file" type="file" accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" aria-describedby="resume-file-help resume-file-status">
+    <p id="resume-file-help">PDF or Word (.docx), up to 10 MB. Import replaces the text below.</p>
+    <p id="resume-file-status" role="status"></p>
     <label for="resume-text">Paste your résumé text</label>
     <textarea id="resume-text" rows="8" maxlength="25000" placeholder="Paste your experience, skills, and education"></textarea>
     <p>Your résumé stays in this browser. It is used to rank jobs and generate drafts.</p>

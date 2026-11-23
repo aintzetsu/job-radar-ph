@@ -4,6 +4,8 @@
 .resume-panel,.results-pane,.job-detail{background:var(--panel);border:1px solid var(--line);border-radius:16px}
 .resume-panel{margin-bottom:12px}.resume-panel>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;padding:14px 19px;cursor:pointer;font-weight:700}.resume-panel>summary::-webkit-details-marker{display:none}
 .resume-badge{font-size:.875rem;color:var(--mint)}.resume-body{display:grid;gap:11px;padding:0 19px 18px}.resume-body p{font-size:.9rem}
+#resume-file::file-selector-button{border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink);padding:5px 10px;margin-inline-end:10px;font:inherit;cursor:pointer}
+#resume-file-status:empty{display:none}
 textarea{width:100%;resize:vertical;background:#11191b;color:var(--ink);border:1px solid #445456;border-radius:9px;padding:10px 12px;font:inherit;line-height:1.45}
 .actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.primary{background:var(--mint);color:#152312;border-color:var(--mint);font-weight:750}
 .live-head{align-items:center}.live-head p{font-size:.9rem;margin-top:3px}
