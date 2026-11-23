@@ -1,0 +1,155 @@
+.application-tracker {
+  min-width: 0;
+  margin: 2rem 0;
+  scroll-margin-top: 1rem;
+}
+
+.tracker-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .5rem 1rem;
+  margin-bottom: .25rem;
+}
+
+.tracker-heading h2,
+.tracker-identity h3 {
+  margin: 0;
+}
+
+.tracker-count,
+.tracker-note {
+  color: var(--muted, #a8b9b6);
+  font-size: .9rem;
+}
+
+.tracker-list {
+  display: grid;
+  gap: .65rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tracker-list[hidden],
+.tracker-empty[hidden],
+.tracker-due[hidden] {
+  display: none;
+}
+
+.tracker-empty,
+.tracker-row {
+  padding: 1rem;
+  background: var(--panel, #192124);
+  border: 1px solid var(--line, #303d40);
+  border-radius: 1rem;
+}
+
+.tracker-empty {
+  margin-top: 1rem;
+}
+
+.tracker-row {
+  display: grid;
+  grid-template-columns: minmax(12rem, 1.4fr) minmax(16rem, 1fr) auto;
+  align-items: start;
+  gap: .85rem;
+}
+
+.tracker-identity {
+  overflow-wrap: anywhere;
+}
+
+.tracker-identity h3 {
+  font-size: 1.05rem;
+  line-height: 1.35;
+}
+
+.tracker-identity p {
+  margin: .25rem 0 0;
+}
+
+.tracker-controls {
+  display: grid;
+  grid-template-columns: minmax(7rem, 1fr) minmax(8.5rem, 1fr);
+  gap: .45rem;
+}
+
+.tracker-input {
+  display: grid;
+  grid-column: auto;
+  gap: .35rem;
+  font-size: .875rem;
+}
+
+.tracker-controls > .tracker-input:first-child {
+  grid-column: auto;
+}
+
+.tracker-input select,
+.tracker-input input {
+  margin: 0;
+  min-width: 0;
+  min-height: 2.75rem;
+  width: 100%;
+  font-size: .875rem;
+}
+
+.tracker-due {
+  margin: .2rem 0 0;
+  color: #ffd58c;
+  font-size: .875rem;
+}
+
+.tracker-actions {
+  display: flex;
+  align-self: center;
+  flex-wrap: wrap;
+  gap: .35rem;
+}
+
+.tracker-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.5rem;
+  padding: .35rem .6rem;
+  color: var(--ink, #f2f7f4);
+  background: var(--bg, #101517);
+  border: 1px solid var(--line, #303d40);
+  border-radius: .55rem;
+  text-decoration: none;
+  font: inherit;
+  font-size: .875rem;
+}
+
+.tracker-button:hover {
+  border-color: var(--mint, #bafa97);
+}
+
+.tracker-remove {
+  color: #ffc7bb;
+}
+
+.tracker-feedback {
+  min-height: 1.4em;
+  margin: .45rem 0 0;
+  color: var(--muted, #a8b9b6);
+  font-size: .875rem;
+}
+
+@media (max-width: 860px) {
+  .tracker-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .tracker-actions {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 560px) {
+  .tracker-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

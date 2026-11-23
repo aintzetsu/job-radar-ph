@@ -1,0 +1,90 @@
+.application-dialog {
+  color: var(--ink, #f2f7f4);
+  background: var(--panel, #192124);
+  border: 1px solid var(--line, #303d40);
+  border-radius: 20px;
+  padding: 0;
+  width: min(780px, calc(100% - 24px));
+  max-width: none;
+  max-height: min(92vh, 900px);
+  overflow: hidden;
+}
+.application-dialog::backdrop { background: rgb(4 10 9 / .78); }
+.application-shell { display: flex; flex-direction: column; max-height: min(92vh, 900px); }
+.application-header, .application-toolbar, .application-footer {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  flex-wrap: wrap;
+  padding: .9rem 1.15rem;
+}
+.application-header, .application-toolbar { justify-content: space-between; }
+.application-header { border-bottom: 1px solid var(--line, #303d40); }
+.application-header h2 { margin: 0; font-size: 1.45rem; }
+.application-job { margin: .2rem 0 0; color: var(--muted, #a8b9b6); font-size: .9rem; overflow-wrap: anywhere; }
+.application-tabs { display: flex; gap: .35rem; flex-wrap: wrap; }
+.application-tabs [aria-selected="true"], .application-download {
+  background: var(--mint, #bafa97);
+  color: #152312;
+  border-color: var(--mint, #bafa97);
+  font-weight: 700;
+}
+.application-review { color: var(--muted, #a8b9b6); font-size: .9rem; }
+.application-body { overflow: auto; min-height: 0; padding: 1rem 1.15rem 1.2rem; background: #101819; }
+.application-paper {
+  min-height: 345px;
+  padding: clamp(1.25rem, 5vw, 2.85rem);
+  background: #fcfdfa;
+  color: #202823;
+  border-radius: 10px;
+  font: .91rem/1.45 Arial, sans-serif;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.application-name { font-size: 1.35rem; line-height: 1.25; font-weight: bold; padding-bottom: .45rem; }
+.application-section { font-size: 1rem; font-weight: bold; margin-top: .7rem; padding-bottom: .2rem; border-bottom: 1px solid #d2d9d2; }
+.application-bullet { padding-left: .9rem; text-indent: -.65rem; margin-block: .12rem; }
+.application-edit-area { display: grid; gap: .5rem; }
+.application-edit-area[hidden], .application-paper[hidden] { display: none; }
+.application-edit-area textarea {
+  width: 100%;
+  min-height: 350px;
+  resize: vertical;
+  padding: .85rem;
+  border: 1px solid #445456;
+  border-radius: 9px;
+  background: #11191b;
+  color: inherit;
+  font: .95rem/1.45 system-ui, sans-serif;
+}
+.application-footer { border-top: 1px solid var(--line, #303d40); justify-content: flex-end; }
+@media (max-width: 480px) {
+  .application-header, .application-toolbar, .application-footer, .application-body { padding: .65rem; }
+  .application-footer { justify-content: flex-start; }
+  .application-paper { min-height: 300px; }
+}
+@media print {
+  body.application-printing { display: block !important; background: white !important; margin: 0 !important; }
+  body.application-printing > :not(.application-dialog) { display: none !important; }
+  .application-printing .application-dialog[open] {
+    display: block !important;
+    width: 100% !important;
+    position: static !important;
+    overflow: visible !important;
+    max-height: none !important;
+    border: 0 !important;
+    background: white !important;
+  }
+  .application-dialog::backdrop { display: none; }
+  .application-printing .application-shell, .application-printing .application-body {
+    display: block !important;
+    max-height: none !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    background: white !important;
+  }
+  .application-printing .application-header, .application-printing .application-toolbar,
+  .application-printing .application-footer, .application-printing .application-edit-area { display: none !important; }
+  .application-printing .application-paper { display: block !important; border-radius: 0; padding: .15in; font-size: 10.5pt; }
+  .application-printing .application-section { break-after: avoid; }
+}
