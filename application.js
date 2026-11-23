@@ -1,4 +1,4 @@
-const standardHeadings = /^(summary|professional summary|profile|objective|work experience|professional experience|employment history|experience|education|education and awards|skills|additional skills|technical skills|certifications?|awards?|projects?|languages)$/i;
+const standardHeadings = /^(summary|professional summary|profile|objective|relevant experience highlights|work experience|professional experience|employment history|experience|education|education and awards|skills|additional skills|technical skills|certifications?|awards?|projects?|languages)$/i;
 const bullet = /^(?:[•●▪◦‣*–—-]|\d+[.)])\s+/u;
 const stopWords = new Set((
   'a an and are as at be been being by can could did do does for from had has have if in into is it its may must of on or our ' +
@@ -23,8 +23,20 @@ function tokens(value) {
 
 function jobKeywords(job) {
   const words = new Map();
-  for (const word of tokens(job.description || '')) words.set(wordRoot(word), 1);
-  for (const word of tokens(job.title || '')) words.set(wordRoot(word), 4);
+  const lines = (job.description || '').split(/\n+/);
+  let weight = 2;
+  for (const line of lines) {
+    if (/^(?:qualifications|requirements|responsibilities|what you(?:’ll|'ll| will) do|(?:preferred|required) skills)\s*:?\s*$/i.test(line.trim())) weight = 5;
+    if (/^(?:benefits|about us|equal opportunity|how to apply)\s*:?\s*$/i.test(line.trim())) weight = 1;
+    for (const word of tokens(line)) {
+      const root = wordRoot(word);
+      words.set(root, Math.max(words.get(root) || 0, weight));
+    }
+  }
+  for (const word of tokens(job.title || '')) {
+    const root = wordRoot(word);
+    words.set(root, (words.get(root) || 0) + 3);
+  }
   return words;
 }
 
@@ -78,6 +90,21 @@ function relevantEvidence(lines, keywords) {
     .map(item => item.line);
 }
 
+function sharedTopics(evidence, keywords, description) {
+  const roots = new Set(evidence.flatMap(line=>tokens(line).map(wordRoot)));
+  const byRoot = new Map();
+  for (const word of tokens(description)) {
+    const root = wordRoot(word);
+    if (roots.has(root) && !byRoot.has(root) && /^[\p{L}][\p{L}+#-]*$/u.test(word)) {
+      byRoot.set(root,word);
+    }
+  }
+  return [...byRoot.entries()]
+    .sort(([a],[b])=>(keywords.get(b)||0)-(keywords.get(a)||0))
+    .slice(0,3)
+    .map(([,word])=>word);
+}
+
 export function buildApplication(resume, job) {
   const lines = resume.replace(/\r\n?/g, '\n').trim().split('\n').map(line => line.trim());
   const title = String(job.title || '').trim() || 'this position';
@@ -85,10 +112,13 @@ export function buildApplication(resume, job) {
   const keywords = jobKeywords({ ...job, title });
   const applicant = findName(lines[0]);
   const evidence = relevantEvidence(lines.slice(applicant ? 1 : 0), keywords);
+  const topics = sharedTopics(evidence,keywords,job.description || '');
   const prioritized = prioritizeBullets(lines, keywords);
   const opening = prioritized.findIndex(isHeading);
   const insertAt = opening > 0 ? opening : applicant ? 1 : 0;
-  prioritized.splice(insertAt, 0, '', 'Applying for ' + title, '');
+  const target = ['', 'Applying for ' + title + (company ? ' at ' + company : ''), ''];
+  if (evidence.length) target.push('Relevant Experience Highlights', ...evidence.slice(0,2).map(line=>'• '+line), '');
+  prioritized.splice(insertAt, 0, ...target);
 
   const cover = [
     'Dear ' + (company ? company + ' hiring team' : 'Hiring Team') + ',',
@@ -96,7 +126,9 @@ export function buildApplication(resume, job) {
     'I’m applying for the ' + title + ' position' + (company ? ' at ' + company : '') + '.'
   ];
   if (evidence.length) {
-    cover.push('', 'This role aligns with my experience in the areas below.', '',
+    const focus = new Intl.ListFormat('en',{type:'conjunction'}).format(topics);
+    cover.push('', focus ? 'Your posting’s focus on '+focus+' stood out to me. Below are examples from my experience that relate to the role.' :
+      'Below are examples from my experience that relate to the role.', '',
       ...evidence.map(line => '• ' + line));
   }
   cover.push('', 'Thank you for reviewing my application. I’d welcome the opportunity to discuss how I could contribute to your team.',
@@ -263,4 +295,5 @@ export function initApplication({ getResume, onGenerated, onMissingResume }) {
     }
   };
 }
+
 
