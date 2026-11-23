@@ -2,6 +2,7 @@ import { initBoards } from './boards.js';
 import { initTracker } from './tracker.js';
 import { initResumeImport } from './resume-import.js';
 import { initApplication } from './application.js';
+import { initAccount } from './account.js';
 import {
   analyzeJobFit,
   extractCompensation,
@@ -69,6 +70,8 @@ let loading = false;
 let failedFeeds = 0;
 let filtersTimer;
 let currentMatches = [];
+let applyingCloudState = false;
+let account = null;
 
 function element(tag, text, className) {
   const node = document.createElement(tag);
@@ -151,12 +154,82 @@ const tracker = initTracker({
     updateSaveButton();
     updatePipelineStats();
     if (allJobs.length) renderResults();
+    if (!applyingCloudState) account?.scheduleSync();
   },
   onOpen: job => {
     showJob(job);
     detail.focus({ preventScroll: true });
     detail.scrollIntoView({ behavior: 'smooth', block: 'start' });
   },
+});
+
+function getLocalStateSnapshot() {
+  return {
+    resumeText,
+    applications: tracker.list(),
+    filters: {
+      role: role.value.trim(),
+      location: locationInput.value,
+      source: sourceInput.value,
+      liveAge: age.value,
+      workMode,
+    },
+    theme: document.documentElement.dataset.theme === 'light' ? 'light' : 'dark',
+  };
+}
+
+function applyCloudWorkspaceState(cloud) {
+  if (!cloud || typeof cloud !== 'object') return;
+  applyingCloudState = true;
+  try {
+    const previousId = selectedJob?.id;
+    resumeText = typeof cloud.resumeText === 'string' ? cloud.resumeText.slice(0, 25000) : '';
+    resumeField.value = resumeText;
+    profile = resumeProfile(resumeText);
+    writeLocal(resumeKey, resumeText);
+
+    if (cloud.filters && typeof cloud.filters === 'object') {
+      if (typeof cloud.filters.role === 'string') role.value = cloud.filters.role.slice(0, 120);
+      if ([...locationInput.options].some(o => o.value === cloud.filters.location)) {
+        locationInput.value = cloud.filters.location;
+      }
+      if ([...sourceInput.options].some(o => o.value === cloud.filters.source)) {
+        sourceInput.value = cloud.filters.source;
+      }
+      if ([...age.options].some(o => o.value === cloud.filters.liveAge)) {
+        age.value = cloud.filters.liveAge;
+      }
+      if (['all', 'remote', 'onsite'].includes(cloud.filters.workMode)) {
+        workMode = cloud.filters.workMode;
+      }
+    }
+
+    if (Array.isArray(cloud.applications)) {
+      tracker.replaceAll(cloud.applications, { silent: true });
+    }
+
+    if (cloud.theme === 'light' || cloud.theme === 'dark') {
+      window.setJobRadarTheme?.(cloud.theme, { silent: true });
+    }
+
+    updateResumeMeta();
+    updatePipelineStats();
+    updateSaveButton();
+    resetResults();
+    if (selectedJob && selectedJob.id === previousId) showJob(selectedJob);
+  } finally {
+    applyingCloudState = false;
+  }
+}
+
+account = initAccount({
+  getLocalState: getLocalStateSnapshot,
+  applyCloudState: applyCloudWorkspaceState,
+  onStatusChange: () => updatePipelineStats(),
+});
+
+window.addEventListener('job-radar-theme-change', () => {
+  if (!applyingCloudState) account?.scheduleSync();
 });
 
 function updatePipelineStats() {
@@ -169,7 +242,13 @@ function updatePipelineStats() {
   const statPipelineSub = byId('stat-pipeline-sub');
   if (statPipeline) statPipeline.textContent = total === 1 ? '1 saved' : `${total} saved`;
   if (statPipelineSub) {
-    statPipelineSub.textContent = active ? `${counts.Applied || 0} applied · ${counts.Interviewing || 0} interviewing` : 'Track stages & follow-ups →';
+    if (active) {
+      statPipelineSub.textContent = `${counts.Applied || 0} applied · ${counts.Interviewing || 0} interviewing`;
+    } else if (account?.isSignedIn()) {
+      statPipelineSub.textContent = 'Cloud synced to your account →';
+    } else {
+      statPipelineSub.textContent = 'Track stages & follow-ups →';
+    }
   }
 }
 
@@ -188,7 +267,7 @@ function renderPresets() {
     ...labels.map(label => {
       const node = button(label, () => {
         role.value = label;
-        resetResults();
+        resetResults({ sync: true });
       });
       node.setAttribute('aria-pressed', String(role.value.trim() === label));
       return node;
@@ -217,7 +296,7 @@ function useResume() {
     : 'Résumé matching active for this visit (browser storage unavailable).';
   role.value = '';
   sort.value = 'match';
-  resetResults();
+  resetResults({ sync: true });
   if (selectedJob && selectedJob.id === previousId) showJob(selectedJob);
 }
 
@@ -238,14 +317,14 @@ byId('clear-resume').addEventListener('click', () => {
   writeLocal(resumeKey, '');
   byId('resume-status').textContent = 'Résumé cleared.';
   role.value = 'Data Annotation';
-  resetResults();
+  resetResults({ sync: true });
   if (selectedJob && selectedJob.id === previousId) showJob(selectedJob);
 });
 
 byId('clear-role')?.addEventListener('click', () => {
   role.value = '';
   role.focus();
-  resetResults();
+  resetResults({ sync: true });
 });
 
 byId('focus-search-btn')?.addEventListener('click', () => {
@@ -266,7 +345,7 @@ document.addEventListener('keydown', event => {
 workModeGroup?.querySelectorAll('[data-work-mode]').forEach(btn => {
   btn.addEventListener('click', () => {
     workMode = btn.dataset.workMode;
-    resetResults();
+    resetResults({ sync: true });
   });
 });
 
@@ -533,12 +612,12 @@ function renderResults() {
   if (loading) copy = 'Checking employer feeds…';
   else if (failedFeeds === feeds.length) copy = 'Live feeds could not load right now. Try Refresh or add a posting directly.';
   empty.append(element('p', copy));
-  if (!loading && days) empty.append(button('Search any time', () => { age.value = '0'; resetResults(); }));
-  if (!loading && keyword) empty.append(button('Clear keyword', () => { role.value = ''; resetResults(); }));
+  if (!loading && days) empty.append(button('Search any time', () => { age.value = '0'; resetResults({ sync: true }); }));
+  if (!loading && keyword) empty.append(button('Clear keyword', () => { role.value = ''; resetResults({ sync: true }); }));
   if (!loading && (source !== 'all' || workMode !== 'all')) {
-    empty.append(button('Reset source & setup', () => { sourceInput.value = 'all'; workMode = 'all'; resetResults(); }));
+    empty.append(button('Reset source & setup', () => { sourceInput.value = 'all'; workMode = 'all'; resetResults({ sync: true }); }));
   }
-  if (!loading && location !== 'Anywhere') empty.append(button('Search all locations', () => { locationInput.value = 'Anywhere'; resetResults(); }));
+  if (!loading && location !== 'Anywhere') empty.append(button('Search all locations', () => { locationInput.value = 'Anywhere'; resetResults({ sync: true }); }));
   if (!selectedJob || selectedJob.source !== 'Pasted posting') {
     selectedJob = null;
     detail.replaceChildren(element('p', 'Choose a listing to inspect its details, or use + Add a posting above.', 'empty-detail'));
@@ -546,9 +625,10 @@ function renderResults() {
   results.replaceChildren(empty);
 }
 
-function resetResults() {
+function resetResults({ sync = false } = {}) {
   visibleCount = pageSize;
   renderResults();
+  if (sync && !applyingCloudState) account?.scheduleSync();
 }
 
 const cachedFeeds = new Map();
@@ -638,14 +718,14 @@ manual.addEventListener('submit', event => {
 
 byId('filters').addEventListener('input', event => {
   clearTimeout(filtersTimer);
-  if (event.target === role) filtersTimer = setTimeout(resetResults, 150);
-  else resetResults();
+  if (event.target === role) filtersTimer = setTimeout(() => resetResults({ sync: true }), 150);
+  else resetResults({ sync: true });
 });
 byId('filters').addEventListener('submit', event => {
   event.preventDefault();
-  resetResults();
+  resetResults({ sync: true });
 });
-byId('sort-jobs').addEventListener('input', resetResults);
+byId('sort-jobs').addEventListener('input', () => resetResults());
 byId('refresh-jobs').addEventListener('click', refreshJobs);
 document.addEventListener('visibilitychange', () => {
   if (!document.hidden) refreshIfDue();
