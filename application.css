@@ -1,71 +1,161 @@
 .application-dialog {
   color: var(--ink, #f2f7f4);
-  background: var(--panel, #192124);
-  border: 1px solid var(--line, #303d40);
+  background: var(--panel, #151e22);
+  border: 1px solid var(--line, #2a393f);
   border-radius: 20px;
   padding: 0;
-  width: min(780px, calc(100% - 24px));
+  width: min(820px, calc(100% - 24px));
   max-width: none;
-  max-height: min(92vh, 900px);
+  max-height: min(92vh, 920px);
   overflow: hidden;
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.55);
 }
-.application-dialog::backdrop { background: rgb(4 10 9 / .78); }
-.application-shell { display: flex; flex-direction: column; max-height: min(92vh, 900px); }
-.application-header, .application-toolbar, .application-footer {
+.application-dialog::backdrop {
+  background: rgb(4 10 9 / 0.78);
+  backdrop-filter: blur(6px);
+}
+.application-shell {
+  display: flex;
+  flex-direction: column;
+  max-height: min(92vh, 920px);
+}
+.application-header,
+.application-toolbar,
+.application-footer {
   display: flex;
   align-items: center;
-  gap: .6rem;
+  gap: 0.65rem;
   flex-wrap: wrap;
-  padding: .9rem 1.15rem;
+  padding: 0.9rem 1.2rem;
 }
-.application-header, .application-toolbar { justify-content: space-between; }
-.application-header { border-bottom: 1px solid var(--line, #303d40); }
-.application-header h2 { margin: 0; font-size: 1.45rem; }
-.application-job { margin: .2rem 0 0; color: var(--muted, #a8b9b6); font-size: .9rem; overflow-wrap: anywhere; }
-.application-tabs { display: flex; gap: .35rem; flex-wrap: wrap; }
-.application-tabs [aria-selected="true"], .application-download {
-  background: var(--mint, #bafa97);
-  color: #152312;
-  border-color: var(--mint, #bafa97);
+.application-header,
+.application-toolbar,
+.application-footer {
+  justify-content: space-between;
+}
+.application-header {
+  border-bottom: 1px solid var(--line-subtle, #253237);
+}
+.application-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  letter-spacing: -0.025em;
+}
+.application-job {
+  margin: 0.2rem 0 0;
+  color: var(--muted, #9fb2ad);
+  font-size: 0.86rem;
+  overflow-wrap: anywhere;
+}
+.application-tabs,
+.application-tones,
+.application-footer-actions {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.application-tones[hidden] {
+  display: none;
+}
+.application-tones button {
+  padding: 0.36rem 0.7rem;
+  font-size: 0.8rem;
+  border-radius: 999px;
+}
+.application-tabs [aria-selected="true"],
+.application-tones [aria-pressed="true"],
+.application-download {
+  background: var(--mint, #a8f57e);
+  color: #10210e;
+  border-color: var(--mint, #a8f57e);
   font-weight: 700;
 }
-.application-review { color: var(--muted, #a8b9b6); font-size: .9rem; }
-.application-body { overflow: auto; min-height: 0; padding: 1rem 1.15rem 1.2rem; background: #101819; }
+.application-stats {
+  color: var(--muted, #9fb2ad);
+  font-size: 0.82rem;
+}
+.application-body {
+  overflow: auto;
+  min-height: 0;
+  padding: 1.1rem 1.2rem 1.25rem;
+  background: #0d1416;
+}
 .application-paper {
   min-height: 345px;
-  padding: clamp(1.25rem, 5vw, 2.85rem);
-  background: #fcfdfa;
-  color: #202823;
-  border-radius: 10px;
-  font: .91rem/1.45 Arial, sans-serif;
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+  background: #f4f7f2;
+  color: #1a241e;
+  border: 1px solid #d5e0d6;
+  border-radius: 12px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
+  font: 0.91rem/1.48 Arial, sans-serif;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
-.application-name { font-size: 1.35rem; line-height: 1.25; font-weight: bold; padding-bottom: .45rem; }
-.application-section { font-size: 1rem; font-weight: bold; margin-top: .7rem; padding-bottom: .2rem; border-bottom: 1px solid #d2d9d2; }
-.application-bullet { padding-left: .9rem; text-indent: -.65rem; margin-block: .12rem; }
-.application-edit-area { display: grid; gap: .5rem; }
-.application-edit-area[hidden], .application-paper[hidden] { display: none; }
+.application-name {
+  font-size: 1.35rem;
+  line-height: 1.25;
+  font-weight: bold;
+  padding-bottom: 0.45rem;
+}
+.application-section {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-top: 0.7rem;
+  padding-bottom: 0.2rem;
+  border-bottom: 1px solid #c9d5ca;
+}
+.application-bullet {
+  padding-left: 0.9rem;
+  text-indent: -0.65rem;
+  margin-block: 0.14rem;
+}
+.application-edit-area {
+  display: grid;
+  gap: 0.5rem;
+}
+.application-edit-area[hidden],
+.application-paper[hidden] {
+  display: none;
+}
 .application-edit-area textarea {
   width: 100%;
-  min-height: 350px;
+  min-height: 360px;
   resize: vertical;
-  padding: .85rem;
-  border: 1px solid #445456;
-  border-radius: 9px;
-  background: #11191b;
-  color: inherit;
-  font: .95rem/1.45 system-ui, sans-serif;
+  padding: 0.9rem;
+  border: 1px solid var(--line-subtle, #38494f);
+  border-radius: 10px;
+  background: #11181b;
+  color: var(--ink, #f2f7f4);
+  font: 0.92rem/1.5 var(--font-mono, monospace);
 }
-.application-footer { border-top: 1px solid var(--line, #303d40); justify-content: flex-end; }
-@media (max-width: 480px) {
-  .application-header, .application-toolbar, .application-footer, .application-body { padding: .65rem; }
-  .application-footer { justify-content: flex-start; }
-  .application-paper { min-height: 300px; }
+.application-footer {
+  border-top: 1px solid var(--line-subtle, #253237);
+}
+@media (max-width: 600px) {
+  .application-header,
+  .application-toolbar,
+  .application-footer,
+  .application-body {
+    padding: 0.75rem;
+  }
+  .application-footer {
+    justify-content: flex-start;
+  }
+  .application-paper {
+    min-height: 280px;
+  }
 }
 @media print {
-  body.application-printing { display: block !important; background: white !important; margin: 0 !important; }
-  body.application-printing > :not(.application-dialog) { display: none !important; }
+  body.application-printing {
+    display: block !important;
+    background: white !important;
+    margin: 0 !important;
+  }
+  body.application-printing > :not(.application-dialog) {
+    display: none !important;
+  }
   .application-printing .application-dialog[open] {
     display: block !important;
     width: 100% !important;
@@ -73,18 +163,35 @@
     overflow: visible !important;
     max-height: none !important;
     border: 0 !important;
+    box-shadow: none !important;
     background: white !important;
   }
-  .application-dialog::backdrop { display: none; }
-  .application-printing .application-shell, .application-printing .application-body {
+  .application-dialog::backdrop {
+    display: none;
+  }
+  .application-printing .application-shell,
+  .application-printing .application-body {
     display: block !important;
     max-height: none !important;
     overflow: visible !important;
     padding: 0 !important;
     background: white !important;
   }
-  .application-printing .application-header, .application-printing .application-toolbar,
-  .application-printing .application-footer, .application-printing .application-edit-area { display: none !important; }
-  .application-printing .application-paper { display: block !important; border-radius: 0; padding: .15in; font-size: 10.5pt; }
-  .application-printing .application-section { break-after: avoid; }
+  .application-printing .application-header,
+  .application-printing .application-toolbar,
+  .application-printing .application-footer,
+  .application-printing .application-edit-area {
+    display: none !important;
+  }
+  .application-printing .application-paper {
+    display: block !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0;
+    padding: 0.15in;
+    font-size: 10.5pt;
+  }
+  .application-printing .application-section {
+    break-after: avoid;
+  }
 }
