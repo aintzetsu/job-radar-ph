@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="./dashboard.css">
   <link rel="stylesheet" href="./tracker.css">
   <link rel="stylesheet" href="./application.css">
+  <link rel="stylesheet" href="./account.css">
   <link rel="stylesheet" href="./theme.css">
 </head>
 <body>
@@ -31,6 +32,10 @@
         <button type="button" class="kbd-hint" id="focus-search-btn" title="Jump to role search (/)">
           <span>/</span>
           <small>Search</small>
+        </button>
+        <button type="button" id="account-btn" class="account-pill" aria-haspopup="dialog" aria-label="Sign in with Gmail OTP">
+          <span class="account-dot" aria-hidden="true"></span>
+          <span id="account-btn-label">Sign in</span>
         </button>
         <button type="button" id="theme-toggle" aria-label="Dark mode" aria-pressed="true" title="Switch to light mode" disabled>
           <span class="theme-sky" aria-hidden="true">
@@ -219,6 +224,76 @@
       </div>
       <div id="official-platforms" class="grid grid-4"></div>
     </section>
+
+    <dialog id="account-dialog" class="account-dialog" aria-labelledby="account-modal-title">
+      <div class="account-head">
+        <div>
+          <h2 id="account-modal-title">Account &amp; Cloud Sync</h2>
+          <p class="modal-sub">Sign in via Gmail OTP to sync your résumé, pipeline, notes, filters &amp; theme.</p>
+        </div>
+        <button type="button" id="close-account" aria-label="Close account modal">Close</button>
+      </div>
+
+      <div id="account-email-view" class="account-stack">
+        <div id="account-config-banner" class="account-banner">Enter your Gmail or email address to receive a one-time 6-digit verification code.</div>
+        <form id="account-email-form" class="account-stack">
+          <label class="account-field">
+            Email or Gmail address
+            <input id="account-email-input" type="email" required maxlength="254" autocomplete="email" placeholder="you@gmail.com">
+          </label>
+          <button type="submit" id="account-send-otp" class="primary">Send 6-digit code</button>
+        </form>
+      </div>
+
+      <div id="account-otp-view" class="account-stack" hidden>
+        <p id="account-otp-prompt" class="account-banner">Sent a 6-digit code to your inbox.</p>
+        <form id="account-otp-form" class="account-stack">
+          <label class="account-field">
+            6-digit verification code
+            <input id="account-otp-code" class="otp-code-input" type="text" inputmode="numeric" pattern="\d{6}" maxlength="6" autocomplete="one-time-code" required placeholder="000000">
+          </label>
+          <button type="submit" id="account-verify-otp" class="primary">Verify &amp; sign in</button>
+        </form>
+        <div class="account-inline-actions">
+          <button type="button" id="account-resend-otp">Resend code</button>
+          <button type="button" id="account-change-email">Use different email</button>
+        </div>
+      </div>
+
+      <div id="account-profile-view" class="account-stack" hidden>
+        <div class="account-profile-card">
+          <div id="account-avatar" class="account-avatar">JR</div>
+          <div class="account-profile-meta">
+            <strong id="account-user-name">User</strong>
+            <span id="account-user-email">user@gmail.com</span>
+            <span id="account-sync-time">Cloud sync active</span>
+          </div>
+        </div>
+        <div class="account-sync-summary">
+          <div class="account-sync-tile">
+            <span>Synced résumé</span>
+            <strong id="account-tile-resume">Empty</strong>
+          </div>
+          <div class="account-sync-tile">
+            <span>Synced pipeline</span>
+            <strong id="account-tile-pipeline">0 saved roles</strong>
+          </div>
+        </div>
+        <form id="account-name-form" class="account-name-row">
+          <label class="account-field">
+            Display name
+            <input id="account-display-name" type="text" minlength="2" maxlength="60" placeholder="Your name">
+          </label>
+          <button type="submit">Save name</button>
+        </form>
+        <div class="account-inline-actions">
+          <button type="button" id="account-sync-now" class="primary">Sync now</button>
+          <button type="button" id="account-logout">Sign out</button>
+        </div>
+      </div>
+
+      <p id="account-status-msg" class="account-status-msg" role="status" aria-live="polite"></p>
+    </dialog>
 
     <dialog id="paste-dialog" aria-labelledby="paste-title">
       <div class="modal-head">
