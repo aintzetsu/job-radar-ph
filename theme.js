@@ -15,13 +15,22 @@
       toggle.title = dark ? 'Switch to light mode' : 'Switch to dark mode';
     }
 
-    applyTheme(root.dataset.theme);
-    toggle.disabled = false;
-    toggle.addEventListener('click', () => {
-      const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    function setTheme(theme, { silent = false } = {}) {
+      const next = theme === 'light' ? 'light' : 'dark';
       root.classList.add('theme-animated');
       applyTheme(next);
       try { localStorage.setItem(key, next); } catch {}
+      if (!silent) {
+        window.dispatchEvent(new CustomEvent('job-radar-theme-change', { detail: { theme: next } }));
+      }
+    }
+
+    window.setJobRadarTheme = setTheme;
+
+    applyTheme(root.dataset.theme);
+    toggle.disabled = false;
+    toggle.addEventListener('click', () => {
+      setTheme(root.dataset.theme === 'dark' ? 'light' : 'dark');
     });
 
     window.addEventListener('storage', event => {
