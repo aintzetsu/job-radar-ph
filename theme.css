@@ -108,6 +108,27 @@
   background: #f5faf5;
 }
 
+[data-theme="light"] .account-pill.is-signed-in {
+  border-color: #78aa68;
+  background: #d9f3d2;
+  color: #164920;
+}
+
+[data-theme="light"] .account-pill.is-signed-in .account-dot {
+  background: #1d6b3b;
+  box-shadow: 0 0 6px rgba(29, 107, 59, 0.45);
+}
+
+[data-theme="light"] .account-status-msg.is-error {
+  color: #9e2a1f;
+}
+
+[data-theme="light"] .account-banner.is-warn {
+  color: #805000;
+  background: #fef3d9;
+  border-color: #e2be74;
+}
+
 [data-theme="light"] :focus-visible {
   outline-color: #1d6b3b;
 }
