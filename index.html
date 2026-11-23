@@ -1,105 +1,259 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Find fresh annotation, data quality and IT jobs across Philippine and remote job boards.">
-<title>Job Radar PH</title>
-<script src="./theme.js"></script>
-<link rel="icon" href="data:,">
-<style>
-:root{color-scheme:dark;--bg:#101517;--panel:#192124;--line:#303d40;--ink:#f2f7f4;--muted:#a8b9b6;--mint:#bafa97}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top right,#24382e,transparent 50%) var(--bg);color:var(--ink);font:1rem/1.5 system-ui,sans-serif}
-main,header{width:min(1100px,calc(100% - 36px));margin:auto}header{padding:24px 0;border-bottom:1px solid var(--line);font-weight:750}.brand span{color:var(--mint);margin-right:8px}
-.hero{padding:40px 0 24px}h1{font-size:clamp(2.6rem,7vw,5.2rem);line-height:1;letter-spacing:-.065em;margin:0 0 15px}h2{margin:0;font-size:1.45rem;letter-spacing:-.035em}p{margin:0;color:var(--muted)}
-form,.card{background:var(--panel);border:1px solid var(--line);border-radius:16px}form{padding:20px;display:grid;grid-template-columns:2fr 1.3fr 1fr;gap:14px}label{display:grid;gap:6px;font-weight:650;font-size:.9rem}input,select,button,a{font:inherit}input,select{width:100%;min-height:46px;background:#11191b;color:var(--ink);border:1px solid #445456;border-radius:9px;padding:8px 11px}select{appearance:none;padding-right:25px;background:#11191b url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'%3E%3Cpath d='m3 5 4 4 4-4' fill='none' stroke='%23bafa97' stroke-width='1.5'/%3E%3C/svg%3E") right 9px center no-repeat}
-.presets{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px}button,.link{display:inline-block;border:1px solid var(--line);border-radius:9px;padding:7px 12px;background:#11191b;color:var(--ink);text-decoration:none;cursor:pointer;font-size:.9rem}button[aria-pressed=true],.link{color:#152312;background:var(--mint);border-color:var(--mint);font-weight:700}button:hover,.link:hover{filter:brightness(1.13)}:focus-visible{outline:2px solid #fff;outline-offset:3px}
-.results{margin:27px 0 35px}.section-top{margin-bottom:14px;display:flex;gap:10px;align-items:baseline;justify-content:space-between;flex-wrap:wrap}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}.card{padding:17px;display:grid;gap:12px;align-content:start}.card-top{display:flex;align-items:center;gap:10px}.icon{display:grid;place-items:center;min-width:38px;height:38px;border:1px solid var(--line);border-radius:10px;color:var(--mint);font-weight:800}.card h3{margin:0;font-size:1.1rem}.card p{font-size:.9rem;min-height:44px}.link{justify-self:start}.foot{margin-top:14px;font-size:.9rem}
-@media(max-width:760px){.grid{grid-template-columns:repeat(2,1fr)}form{grid-template-columns:1fr 1fr}label:first-child{grid-column:1/-1}}
-@media(max-width:475px){.grid{grid-template-columns:1fr}.card p{min-height:0}.hero{padding-top:28px}}
-</style>
-<link rel="stylesheet" href="./dashboard.css">
-<link rel="stylesheet" href="./tracker.css">
-<link rel="stylesheet" href="./application.css">
-<link rel="stylesheet" href="./theme.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Find fresh AI annotation, data quality, and IT jobs across live Philippine and remote employer feeds, match your résumé, tailor drafts, and track applications.">
+  <title>Job Radar PH — Philippine &amp; Remote Job Workbench</title>
+  <script src="./theme.js"></script>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%230b1012' stroke='%23a8f57e' stroke-width='2.5'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%23a8f57e'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./dashboard.css">
+  <link rel="stylesheet" href="./tracker.css">
+  <link rel="stylesheet" href="./application.css">
+  <link rel="stylesheet" href="./theme.css">
 </head>
 <body>
-<header class="topbar">
-  <a class="brand" href="./"><span aria-hidden="true">◉</span> Job Radar PH</a>
-  <nav aria-label="Site sections">
-    <a href="#live-jobs">Find jobs</a>
-    <a href="#tracker-area">Tracker</a>
-    <a href="#boards-title">Job boards</a>
-  </nav>
-  <button type="button" id="theme-toggle" aria-label="Dark mode" aria-pressed="true" title="Switch to light mode" disabled>
-    <span class="theme-sky" aria-hidden="true">
-      <span class="theme-stars"></span>
-      <span class="theme-clouds"></span>
-      <span class="theme-sun"></span>
-      <span class="theme-moon"></span>
-    </span>
-  </button>
-</header>
-<main>
-<section class="hero"><h1>Find your next job</h1><p>Find fresh openings, tailor your application, and track where you apply.</p></section>
-<details class="resume-panel" id="resume-panel">
-  <summary><span>Match jobs to my résumé</span><span class="resume-badge" id="resume-badge">Add résumé</span></summary>
-  <div class="resume-body">
-    <label for="resume-file">Import a résumé file</label>
-    <input id="resume-file" type="file" accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" aria-describedby="resume-file-help resume-file-status">
-    <p id="resume-file-help">PDF or Word (.docx), up to 10 MB. Import replaces the text below.</p>
-    <p id="resume-file-status" role="status"></p>
-    <label for="resume-text">Paste your résumé text</label>
-    <textarea id="resume-text" rows="8" maxlength="25000" placeholder="Paste your experience, skills, and education"></textarea>
-    <p>Your résumé stays in this browser. It is used to rank jobs and generate drafts.</p>
-    <div class="actions"><button type="button" class="primary" id="use-resume">Match jobs</button><button type="button" id="clear-resume">Clear résumé</button></div>
-    <p id="resume-status" role="status"></p>
-  </div>
-</details>
-<form id="filters" aria-label="Job search filters">
-<label>Role or keyword<input id="role" value="Data Annotation" maxlength="120" placeholder="e.g. Audio Annotation"></label>
-<label>Location<select id="location"><option>Philippines</option><option>Metro Manila</option><option>Quezon City</option><option>Remote</option><option>Anywhere</option></select></label>
-<label>Listing age<select id="age"><option value="1">24 hours</option><option value="3">3 days</option><option value="7">7 days</option><option value="30">30 days</option><option value="0">Any time</option></select></label>
-<div class="presets" aria-label="Suggested roles"></div>
-</form>
-<section class="results" id="live-jobs" aria-labelledby="live-title">
-  <div class="section-top live-head">
-    <div><h2 id="live-title">Live job listings</h2><p id="feed-status" role="status">Loading employer feeds…</p><p>Checks for new listings every 5 minutes while this page is open.</p></div>
-    <div class="actions"><button type="button" id="refresh-jobs">Refresh</button><button type="button" id="paste-job">Add a posting</button></div>
-  </div>
-  <div class="workbench">
-    <div class="results-pane">
-      <div class="result-tools"><p id="result-count" aria-live="polite"></p><label>Sort by<select id="sort-jobs"><option value="match">Best match</option><option value="recent">Newest first</option></select></label></div>
-      <div id="job-results" class="job-results"></div>
-      <button type="button" class="more-button" id="more-jobs" hidden>Show more jobs</button>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="./">
+        <span class="radar-beacon" aria-hidden="true"><span></span></span>
+        <span class="brand-text">Job Radar <strong>PH</strong></span>
+      </a>
+      <nav aria-label="Site sections">
+        <a href="#live-jobs">Find jobs <span class="nav-pill-count" id="nav-jobs-count">0</span></a>
+        <a href="#tracker-area">Pipeline <span class="nav-pill-count" id="nav-tracker-count">0</span></a>
+        <a href="#boards-title">Job boards</a>
+      </nav>
+      <div class="topbar-tools">
+        <button type="button" class="kbd-hint" id="focus-search-btn" title="Jump to role search (/)">
+          <span>/</span>
+          <small>Search</small>
+        </button>
+        <button type="button" id="theme-toggle" aria-label="Dark mode" aria-pressed="true" title="Switch to light mode" disabled>
+          <span class="theme-sky" aria-hidden="true">
+            <span class="theme-stars"></span>
+            <span class="theme-clouds"></span>
+            <span class="theme-sun"></span>
+            <span class="theme-moon"></span>
+          </span>
+        </button>
+      </div>
     </div>
-    <section id="job-detail" class="job-detail" aria-label="Job details" tabindex="-1"><p>Choose a listing to view job details.</p></section>
-  </div>
-</section>
-<section id="tracker-area" class="results" aria-label="Application tracker"><div id="application-tracker"></div></section>
-<section class="results" aria-labelledby="boards-title">
-<div class="section-top"><h2 id="boards-title">Search job platforms</h2><p id="summary" aria-live="polite"></p></div>
-<div id="platforms" class="grid"></div>
-<p class="foot">Results open on each platform. Posting dates and filters are managed by the source.</p>
-</section>
-<section class="results" aria-labelledby="official-title">
-<div class="section-top"><h2 id="official-title">More job boards and employer sites</h2></div>
-<div id="official-platforms" class="grid"></div>
-<p class="foot">Browse current openings on the source page. Use its own filters and check the posting date and location there.</p>
-</section>
-<dialog id="paste-dialog" aria-labelledby="paste-title">
-  <div class="modal-head"><h2 id="paste-title">Add a job posting</h2><button type="button" id="close-paste" aria-label="Close">Close</button></div>
-  <form id="manual-form">
-    <label>Job title<input name="title" required maxlength="160"></label>
-    <label>Company<input name="company" required maxlength="120"></label>
-    <label>Location<input name="location" maxlength="120" placeholder="e.g. Remote, Philippines"></label>
-    <label>Posting link<input name="url" type="url" maxlength="1200" placeholder="https://…"></label>
-    <label class="wide">Job description<textarea name="description" rows="8" required maxlength="30000" placeholder="Copy the employer’s description here"></textarea></label>
-    <p class="wide" id="manual-status" role="status"></p>
-    <div class="actions wide"><button type="submit" class="primary">Open and save posting</button></div>
-  </form>
-</dialog>
-</main>
-<script type="module" src="./dashboard.js"></script>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="hero-eyebrow"><span class="live-dot" aria-hidden="true"></span> PHILIPPINE &amp; REMOTE FEED ENGINE · AUTO-SYNC</p>
+        <h1>Find your next role, <span class="hero-accent">faster.</span></h1>
+        <p>Live employer feeds across AI data QA, tech, and remote PH openings — ranked against your résumé with tailored drafts and a built-in application pipeline.</p>
+      </div>
+      <div class="telemetry-grid" aria-label="Live radar summary">
+        <div class="telemetry-card">
+          <span class="telemetry-label">Employer feeds</span>
+          <strong id="stat-feeds">Checking…</strong>
+          <small id="stat-feeds-sub">8 direct ATS endpoints</small>
+        </div>
+        <div class="telemetry-card">
+          <span class="telemetry-label">Matching roles</span>
+          <strong id="stat-matches">0</strong>
+          <small id="stat-matches-sub">Indexed across active boards</small>
+        </div>
+        <button type="button" class="telemetry-card telemetry-btn" id="stat-resume-card">
+          <span class="telemetry-label">Résumé matcher</span>
+          <strong id="stat-resume">Off</strong>
+          <small id="stat-resume-sub">Click to upload PDF / paste</small>
+        </button>
+        <a class="telemetry-card telemetry-link" href="#tracker-area">
+          <span class="telemetry-label">Saved pipeline</span>
+          <strong id="stat-pipeline">0 saved</strong>
+          <small id="stat-pipeline-sub">Track stages &amp; follow-ups →</small>
+        </a>
+      </div>
+    </section>
+
+    <details class="resume-panel" id="resume-panel">
+      <summary>
+        <span class="resume-summary-left">
+          <span class="resume-icon" aria-hidden="true">✦</span>
+          <span>Match jobs to my résumé</span>
+          <span class="resume-badge" id="resume-badge">Add résumé</span>
+        </span>
+        <span class="resume-toggle-hint" id="resume-toggle-hint">Open matcher</span>
+      </summary>
+      <div class="resume-body">
+        <label class="dropzone" id="resume-dropzone" for="resume-file">
+          <input id="resume-file" type="file" accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" aria-describedby="resume-file-help resume-file-status">
+          <span class="dropzone-title">Drop your PDF or Word (.docx) résumé here, or <strong>browse file</strong></span>
+          <span class="dropzone-sub" id="resume-file-help">Up to 10 MB · Parsed 100% locally in your browser</span>
+        </label>
+        <p id="resume-file-status" role="status"></p>
+        <label class="field-label" for="resume-text">
+          <span>Or paste your résumé text</span>
+          <small id="resume-char-count">0 / 25,000 chars</small>
+        </label>
+        <textarea id="resume-text" rows="6" maxlength="25000" placeholder="Paste your summary, work experience, tools, and skills…"></textarea>
+        <div class="resume-detected" id="resume-detected" hidden></div>
+        <div class="resume-footer-bar">
+          <div class="actions">
+            <button type="button" class="primary" id="use-resume">Match jobs</button>
+            <button type="button" id="clear-resume">Clear résumé</button>
+          </div>
+          <p id="resume-status" role="status"></p>
+        </div>
+      </div>
+    </details>
+
+    <form id="filters" class="filter-dock" aria-label="Job search filters">
+      <div class="filter-grid">
+        <label class="filter-field filter-role">
+          <span>Role or keyword <kbd>/</kbd></span>
+          <div class="input-with-clear">
+            <input id="role" value="Data Annotation" maxlength="120" placeholder="e.g. Data Annotation, Audio, QA, Support">
+            <button type="button" id="clear-role" class="clear-input-btn" aria-label="Clear keyword" title="Clear keyword">×</button>
+          </div>
+        </label>
+        <label class="filter-field">
+          <span>Location</span>
+          <select id="location">
+            <option>Philippines</option>
+            <option>Metro Manila</option>
+            <option>Quezon City</option>
+            <option>Remote</option>
+            <option>Anywhere</option>
+          </select>
+        </label>
+        <label class="filter-field">
+          <span>Source feed</span>
+          <select id="source-filter">
+            <option value="all">All 8 sources</option>
+            <option value="RWS TrainAI">RWS TrainAI</option>
+            <option value="Welo Data">Welo Data</option>
+            <option value="Innodata">Innodata</option>
+            <option value="LILT">LILT</option>
+            <option value="TSMG">TSMG</option>
+            <option value="ReadyOn">ReadyOn</option>
+            <option value="LevelUp">LevelUp</option>
+            <option value="Outsourced Staff">Outsourced Staff</option>
+          </select>
+        </label>
+        <label class="filter-field">
+          <span>Listing age</span>
+          <select id="age">
+            <option value="1">24 hours</option>
+            <option value="3">3 days</option>
+            <option value="7">7 days</option>
+            <option value="30">30 days</option>
+            <option value="0">Any time</option>
+          </select>
+        </label>
+      </div>
+      <div class="filter-subrow">
+        <div class="presets" aria-label="Suggested roles"></div>
+        <div class="work-mode-group" id="work-mode-group" role="group" aria-label="Workplace arrangement">
+          <button type="button" data-work-mode="all" aria-pressed="true">All setups</button>
+          <button type="button" data-work-mode="remote" aria-pressed="false">Remote</button>
+          <button type="button" data-work-mode="onsite" aria-pressed="false">Onsite / Hybrid</button>
+        </div>
+      </div>
+    </form>
+
+    <section class="results" id="live-jobs" aria-labelledby="live-title">
+      <div class="section-top live-head">
+        <div>
+          <h2 id="live-title">Live job listings</h2>
+          <p id="feed-status" role="status">Loading employer feeds…</p>
+        </div>
+        <div class="actions">
+          <button type="button" id="refresh-jobs">↻ Refresh</button>
+          <button type="button" class="primary" id="paste-job">+ Add a posting</button>
+        </div>
+      </div>
+      <div class="workbench">
+        <div class="results-pane">
+          <div class="result-tools">
+            <p id="result-count" aria-live="polite"></p>
+            <label>
+              <span>Sort</span>
+              <select id="sort-jobs">
+                <option value="match">Best match</option>
+                <option value="recent">Newest first</option>
+                <option value="company">Company A–Z</option>
+              </select>
+            </label>
+          </div>
+          <div id="job-results" class="job-results"></div>
+          <button type="button" class="more-button" id="more-jobs" hidden>Show more jobs</button>
+        </div>
+        <section id="job-detail" class="job-detail" aria-label="Job details" tabindex="-1">
+          <p class="empty-detail">Choose a listing on the left to inspect its full details, match breakdown, and tailored application drafts.</p>
+        </section>
+      </div>
+    </section>
+
+    <section id="tracker-area" class="results" aria-label="Application tracker">
+      <div id="application-tracker"></div>
+    </section>
+
+    <section class="results" aria-labelledby="boards-title">
+      <div class="section-top">
+        <div>
+          <h2 id="boards-title">Search job platforms</h2>
+          <p class="section-sub">Launch pre-filtered searches across major Philippine &amp; global boards using your active keywords.</p>
+        </div>
+        <p id="summary" class="summary-pill" aria-live="polite"></p>
+      </div>
+      <div id="platforms" class="grid grid-3"></div>
+      <p class="foot">Results open directly on each platform. Posting dates and filters are managed by the source site.</p>
+    </section>
+
+    <section class="results" aria-labelledby="official-title">
+      <div class="section-top">
+        <div>
+          <h2 id="official-title">Direct employer &amp; government boards</h2>
+          <p class="section-sub">Skip aggregators and browse AI data QA vendors, PH tech employers, and official civil service portals.</p>
+        </div>
+      </div>
+      <div id="official-platforms" class="grid grid-4"></div>
+    </section>
+
+    <dialog id="paste-dialog" aria-labelledby="paste-title">
+      <div class="modal-head">
+        <div>
+          <h2 id="paste-title">Add a custom job posting</h2>
+          <p class="modal-sub">Rank it against your résumé, generate tailored drafts, and save it straight into your pipeline.</p>
+        </div>
+        <button type="button" id="close-paste" aria-label="Close">Close</button>
+      </div>
+      <form id="manual-form">
+        <label>Job title<input name="title" required maxlength="160" placeholder="e.g. AI Data Quality Specialist"></label>
+        <label>Company<input name="company" required maxlength="120" placeholder="e.g. RWS / Acme PH"></label>
+        <label>Location<input name="location" maxlength="120" placeholder="e.g. Remote, Philippines"></label>
+        <label>Posting link<input name="url" type="url" maxlength="1200" placeholder="https://…"></label>
+        <label class="wide">Job description<textarea name="description" rows="7" required maxlength="30000" placeholder="Paste the employer’s job description here"></textarea></label>
+        <p class="wide" id="manual-status" role="status"></p>
+        <div class="actions wide"><button type="submit" class="primary">Open and save posting</button></div>
+      </form>
+    </dialog>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <strong>Job Radar PH</strong>
+        <p>Live public feeds from Lever, Greenhouse &amp; Ashby boards · 100% browser-local résumé matching &amp; pipeline storage.</p>
+      </div>
+      <div class="footer-right">
+        <span class="footer-kbd"><kbd>/</kbd> Search · <kbd>Esc</kbd> Close dialogs</span>
+        <a href="https://ejg-portfolio.vercel.app/" target="_blank" rel="noopener noreferrer">Portfolio by Edison Gaudicos ↗</a>
+        <a href="#live-jobs">Top ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="./dashboard.js"></script>
 </body>
 </html>
