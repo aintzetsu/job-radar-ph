@@ -95,6 +95,10 @@ const officialPlatforms = [
   ['TD', 'TELUS Digital PH', 'AI & Ops', 'Philippine AI community, annotation & operations openings.', 'https://jobs.telusdigital.com/search/jobs/in/country/philippines'],
   ['IN', 'Innodata', 'AI Evaluation', 'Direct Greenhouse board for data annotation and QA.', 'https://job-boards.greenhouse.io/innodatainc'],
   ['AC', 'Accenture PH', 'Enterprise Tech', 'Technology, cloud & BPO openings across Metro Manila & Cebu.', 'https://www.accenture.com/ph-en/careers/jobsearch'],
+  ['SA', 'Scale AI', 'AI Data & RLHF', 'Global AI training, rubric QA, and engineering openings.', 'https://job-boards.greenhouse.io/scaleai'],
+  ['AP', 'Appen', 'AI Crowd Data', 'Remote annotation, linguistic QA, and data project listings.', 'https://job-boards.greenhouse.io/appen'],
+  ['TU', 'TaskUs PH', 'BPO & AI Trust', 'Digital CX, content moderation, and AI ops hubs across PH.', 'https://www.taskus.com/careers/'],
+  ['GL', 'GitLab', 'All-Remote Tech', '100% remote global software, support, and operations roles.', 'https://job-boards.greenhouse.io/gitlab'],
 ];
 
 function sourceCard([initials, name, category, hint, href], action) {
