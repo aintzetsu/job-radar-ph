@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 import {
   feeds,
+  remoteBoardNames,
   externalUrl,
   formatCompactLocation,
   extractCompensation,
@@ -15,6 +16,7 @@ import {
   isRemoteJob,
   selectJobs,
 } from '../jobs.js';
+import { parseRssItems } from '../api/feeds.js';
 import { buildApplication } from '../application.js';
 import {
   buildSessionCookieHeader,
@@ -425,8 +427,28 @@ test('OTP login, cooldown enforcement, attempt lockout, cloud sync, and logout w
   assert.equal(afterLogoutSync.status, 401);
 });
 
-test('HTML bindings and CSS select rules remain intact', async () => {
-  assert.equal(feeds.length, 8);
+test('HTML bindings, expanded feeds, and RSS parser remain intact', async () => {
+  assert.equal(feeds.length, 14);
+  assert.equal(remoteBoardNames.length, 7);
+
+  const rssSample = `
+    <rss><channel>
+      <item>
+        <title><![CDATA[Acme PH: Senior QA Specialist]]></title>
+        <link>https://weworkremotely.com/remote-jobs/acme-qa</link>
+        <region>Anywhere in the World</region>
+        <category>QA</category>
+        <pubDate>Tue, 24 Nov 2026 02:00:00 +0000</pubDate>
+        <description><![CDATA[<p>Remote QA testing.</p>]]></description>
+      </item>
+    </channel></rss>
+  `;
+  const parsed = parseRssItems(rssSample);
+  assert.equal(parsed.length, 1);
+  assert.equal(parsed[0].company, 'Acme PH');
+  assert.equal(parsed[0].title, 'Senior QA Specialist');
+  assert.equal(parsed[0].source, 'We Work Remotely');
+
   const [html, dashboardCss] = await Promise.all([
     fs.readFile(path.join(rootDir, 'index.html'), 'utf8'),
     fs.readFile(path.join(rootDir, 'dashboard.css'), 'utf8'),
