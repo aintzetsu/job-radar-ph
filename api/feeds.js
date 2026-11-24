@@ -11,6 +11,8 @@ export const REMOTE_BOARD_NAMES = [
   'Canva',
   'Alorica',
   'Ubisoft',
+  'Sutherland',
+  'Bosch',
 ];
 
 function stripHtml(value) {
@@ -289,6 +291,8 @@ export async function collectRemoteBoards(fetcher = fetch) {
     ['Canva', f => fetchSmartRecruiters('Canva', 'Canva', f)],
     ['Alorica', f => fetchSmartRecruiters('Alorica', 'Alorica', f)],
     ['Ubisoft', f => fetchSmartRecruiters('Ubisoft2', 'Ubisoft', f)],
+    ['Sutherland', f => fetchSmartRecruiters('Sutherland', 'Sutherland', f)],
+    ['Bosch', f => fetchSmartRecruiters('BoschGroup', 'Bosch', f)],
   ];
 
   const settled = await Promise.allSettled(tasks.map(([, fn]) => fn(fetcher)));
