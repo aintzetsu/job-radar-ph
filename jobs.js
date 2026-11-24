@@ -34,6 +34,31 @@ export const feeds = [
   { name: 'Elastic', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/elastic/jobs?content=true' },
   { name: 'Grafana Labs', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/grafanalabs/jobs?content=true' },
   { name: 'Databricks', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/databricks/jobs?content=true' },
+  { name: 'Airbnb', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/airbnb/jobs?content=true' },
+  { name: 'Dropbox', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/dropbox/jobs?content=true' },
+  { name: 'Reddit', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/reddit/jobs?content=true' },
+  { name: 'Discord', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/discord/jobs?content=true' },
+  { name: 'Twilio', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/twilio/jobs?content=true' },
+  { name: 'Okta', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/okta/jobs?content=true' },
+  { name: 'MongoDB', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/mongodb/jobs?content=true' },
+  { name: 'Datadog', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/datadog/jobs?content=true' },
+  { name: 'Brex', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/brex/jobs?content=true' },
+  { name: 'Duolingo', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/duolingo/jobs?content=true' },
+  { name: 'Coursera', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/coursera/jobs?content=true' },
+  { name: 'Airtable', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/airtable/jobs?content=true' },
+  { name: 'Asana', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/asana/jobs?content=true' },
+  { name: 'Pinterest', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/pinterest/jobs?content=true' },
+  { name: 'Robinhood', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/robinhood/jobs?content=true' },
+  { name: 'Wise', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/wise/jobs?content=true' },
+  { name: 'Celonis', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/celonis/jobs?content=true' },
+  { name: 'ElevenLabs', provider: 'ashby', url: 'https://api.ashbyhq.com/posting-api/job-board/elevenlabs' },
+  { name: 'Replit', provider: 'ashby', url: 'https://api.ashbyhq.com/posting-api/job-board/replit' },
+  { name: 'Modal', provider: 'ashby', url: 'https://api.ashbyhq.com/posting-api/job-board/modal' },
+  { name: 'Ramp', provider: 'ashby', url: 'https://api.ashbyhq.com/posting-api/job-board/ramp' },
+  { name: 'Vanta', provider: 'ashby', url: 'https://api.ashbyhq.com/posting-api/job-board/vanta' },
+  { name: 'Resend', provider: 'ashby', url: 'https://api.ashbyhq.com/posting-api/job-board/resend' },
+  { name: 'Palantir', provider: 'lever', url: 'https://api.lever.co/v0/postings/palantir?mode=json' },
+  { name: 'Zoox', provider: 'lever', url: 'https://api.lever.co/v0/postings/zoox?mode=json' },
 ];
 
 export const remoteBoardNames = [
@@ -47,6 +72,8 @@ export const remoteBoardNames = [
   'Canva',
   'Alorica',
   'Ubisoft',
+  'Sutherland',
+  'Bosch',
 ];
 
 export function externalUrl(value) {
