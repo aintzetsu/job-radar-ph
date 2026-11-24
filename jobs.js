@@ -9,10 +9,31 @@ export const feeds = [
   { name: 'Outsourced Staff', provider: 'lever', url: 'https://api.lever.co/v0/postings/outsourcedstaff?mode=json' },
   { name: 'Scale AI', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/scaleai/jobs?content=true' },
   { name: 'Appen', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/appen/jobs?content=true' },
+  { name: 'Maya PH', provider: 'lever', url: 'https://api.lever.co/v0/postings/maya?mode=json' },
   { name: 'Canonical', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/canonical/jobs?content=true' },
   { name: 'GitLab', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/gitlab/jobs?content=true' },
   { name: 'Anthropic', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/anthropic/jobs?content=true' },
+  { name: 'OpenAI', provider: 'ashby', url: 'https://api.ashbyhq.com/posting-api/job-board/openai' },
+  { name: 'xAI', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/xai/jobs?content=true' },
+  { name: 'Cohere', provider: 'ashby', url: 'https://api.ashbyhq.com/posting-api/job-board/cohere' },
+  { name: 'Perplexity AI', provider: 'ashby', url: 'https://api.ashbyhq.com/posting-api/job-board/perplexity' },
   { name: 'Linear', provider: 'ashby', url: 'https://api.ashbyhq.com/posting-api/job-board/linear' },
+  { name: 'Vercel', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/vercel/jobs?content=true' },
+  { name: 'Supabase', provider: 'ashby', url: 'https://api.ashbyhq.com/posting-api/job-board/supabase' },
+  { name: 'PostHog', provider: 'ashby', url: 'https://api.ashbyhq.com/posting-api/job-board/posthog' },
+  { name: 'Notion', provider: 'ashby', url: 'https://api.ashbyhq.com/posting-api/job-board/notion' },
+  { name: 'Figma', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/figma/jobs?content=true' },
+  { name: 'Cloudflare', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/cloudflare/jobs?content=true' },
+  { name: 'Stripe', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/stripe/jobs?content=true' },
+  { name: 'Coinbase', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/coinbase/jobs?content=true' },
+  { name: 'Spotify', provider: 'lever', url: 'https://api.lever.co/v0/postings/spotify?mode=json' },
+  { name: 'Mozilla', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/mozilla/jobs?content=true' },
+  { name: 'Wikimedia', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/wikimedia/jobs?content=true' },
+  { name: 'Buffer', provider: 'ashby', url: 'https://api.ashbyhq.com/posting-api/job-board/buffer' },
+  { name: 'Sourcegraph', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/sourcegraph91/jobs?content=true' },
+  { name: 'Elastic', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/elastic/jobs?content=true' },
+  { name: 'Grafana Labs', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/grafanalabs/jobs?content=true' },
+  { name: 'Databricks', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/databricks/jobs?content=true' },
 ];
 
 export const remoteBoardNames = [
@@ -23,6 +44,9 @@ export const remoteBoardNames = [
   'We Work Remotely',
   'Himalayas',
   'Arbeitnow',
+  'Canva',
+  'Alorica',
+  'Ubisoft',
 ];
 
 export function externalUrl(value) {
