@@ -7,6 +7,22 @@ export const feeds = [
   { name: 'ReadyOn', provider: 'ashby', url: 'https://api.ashbyhq.com/posting-api/job-board/readyon.ai' },
   { name: 'LevelUp', provider: 'lever', url: 'https://api.lever.co/v0/postings/levelup?mode=json' },
   { name: 'Outsourced Staff', provider: 'lever', url: 'https://api.lever.co/v0/postings/outsourcedstaff?mode=json' },
+  { name: 'Scale AI', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/scaleai/jobs?content=true' },
+  { name: 'Appen', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/appen/jobs?content=true' },
+  { name: 'Canonical', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/canonical/jobs?content=true' },
+  { name: 'GitLab', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/gitlab/jobs?content=true' },
+  { name: 'Anthropic', provider: 'greenhouse', url: 'https://boards-api.greenhouse.io/v1/boards/anthropic/jobs?content=true' },
+  { name: 'Linear', provider: 'ashby', url: 'https://api.ashbyhq.com/posting-api/job-board/linear' },
+];
+
+export const remoteBoardNames = [
+  'Remotive',
+  'Jobicy',
+  'Working Nomads',
+  'RemoteOK',
+  'We Work Remotely',
+  'Himalayas',
+  'Arbeitnow',
 ];
 
 export function externalUrl(value) {
@@ -126,6 +142,34 @@ export async function loadFeed(feed, fetcher = fetch) {
       url: externalUrl(job.url),
       applyUrl: externalUrl(job.applyUrl),
     }));
+}
+
+export async function loadRemoteBoards(fetcher = fetch) {
+  const response = await fetcher('/api/feeds', { signal: AbortSignal.timeout(15000), cache: 'no-cache' });
+  const type = response.headers.get('content-type') || '';
+  if (!response.ok || !type.includes('application/json')) {
+    return { sources: [], jobs: [] };
+  }
+  const data = await response.json();
+  if (!data?.ok || !Array.isArray(data.jobs)) {
+    return { sources: [], jobs: [] };
+  }
+  const jobs = data.jobs
+    .filter(raw => raw?.id && typeof raw.title === 'string' && raw.title.trim() && externalUrl(raw.url))
+    .map(raw => ({
+      ...raw,
+      title: raw.title.trim(),
+      location: plain(raw.location) || 'Remote · Worldwide',
+      workplace: plain(raw.workplace),
+      kind: plain(raw.kind),
+      date: typeof raw.date === 'number' && Number.isFinite(raw.date) ? raw.date : null,
+      url: externalUrl(raw.url),
+      applyUrl: externalUrl(raw.applyUrl || raw.url),
+    }));
+  return {
+    sources: Array.isArray(data.sources) ? data.sources : [],
+    jobs,
+  };
 }
 
 export function formatCompactLocation(location, maxShown = 2) {
