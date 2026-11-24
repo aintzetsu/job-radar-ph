@@ -99,6 +99,10 @@ const officialPlatforms = [
   ['AP', 'Appen', 'AI Crowd Data', 'Remote annotation, linguistic QA, and data project listings.', 'https://job-boards.greenhouse.io/appen'],
   ['TU', 'TaskUs PH', 'BPO & AI Trust', 'Digital CX, content moderation, and AI ops hubs across PH.', 'https://www.taskus.com/careers/'],
   ['GL', 'GitLab', 'All-Remote Tech', '100% remote global software, support, and operations roles.', 'https://job-boards.greenhouse.io/gitlab'],
+  ['CV', 'Canva', 'Design & Tech PH', 'Manila & global engineering, design, QA, and ops roles.', 'https://www.lifeatcanva.com/en/jobs/'],
+  ['MY', 'Maya PH', 'PH FinTech', 'Philippine digital banking, payments, data, and tech roles.', 'https://jobs.lever.co/maya'],
+  ['OA', 'OpenAI', 'Frontier AI', 'Global AI research, safety, operations, and engineering.', 'https://jobs.ashbyhq.com/openai'],
+  ['VC', 'Vercel', 'Web Platform', 'Remote-first frontend cloud, DX, and infrastructure roles.', 'https://job-boards.greenhouse.io/vercel'],
 ];
 
 function sourceCard([initials, name, category, hint, href], action) {
