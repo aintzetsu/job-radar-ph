@@ -12,6 +12,8 @@ import {
   isAtsNoiseLine,
   isRemoteJob,
   loadFeed,
+  loadRemoteBoards,
+  remoteBoardNames,
   resumeProfile,
   selectJobs,
 } from './jobs.js';
@@ -50,6 +52,20 @@ function writeLocal(key, value) {
     return false;
   }
 }
+
+function populateSourceFilter() {
+  const total = feeds.length + remoteBoardNames.length;
+  const allOpt = new Option(`All ${total} sources`, 'all');
+  const directGroup = document.createElement('optgroup');
+  directGroup.label = `Direct Employer ATS (${feeds.length})`;
+  for (const feed of feeds) directGroup.append(new Option(feed.name, feed.name));
+  const remoteGroup = document.createElement('optgroup');
+  remoteGroup.label = `Trusted Remote Boards (${remoteBoardNames.length})`;
+  for (const name of remoteBoardNames) remoteGroup.append(new Option(name, name));
+  sourceInput.replaceChildren(allOpt, directGroup, remoteGroup);
+}
+
+populateSourceFilter();
 
 const savedFilters = readLocal(filtersKey, {});
 if (typeof savedFilters.role === 'string') role.value = savedFilters.role.slice(0, 120);
@@ -646,26 +662,43 @@ async function refreshJobs() {
   loading = true;
   const refresh = byId('refresh-jobs');
   const status = byId('feed-status');
+  const totalSources = feeds.length + remoteBoardNames.length;
   refresh.disabled = true;
-  status.textContent = 'Checking ' + feeds.length + ' live employer feeds…';
+  status.textContent = `Checking ${totalSources} live employer & remote sources…`;
   if (!allJobs.length) renderResults();
 
-  const responses = await Promise.allSettled(feeds.map(feed => loadFeed(feed)));
-  failedFeeds = 0;
-  responses.forEach((response, index) => {
+  const [directResponses, remoteResult] = await Promise.all([
+    Promise.allSettled(feeds.map(feed => loadFeed(feed))),
+    loadRemoteBoards().catch(() => ({ sources: [], jobs: [] })),
+  ]);
+
+  let failedDirect = 0;
+  directResponses.forEach((response, index) => {
     if (response.status === 'fulfilled') cachedFeeds.set(feeds[index].name, response.value);
-    else failedFeeds++;
+    else failedDirect++;
   });
+
+  if (remoteResult.jobs.length) {
+    cachedFeeds.set('__remote_boards__', remoteResult.jobs);
+  }
+  const activeRemote = remoteResult.sources.length
+    ? remoteResult.sources.filter(s => s.ok).length
+    : 0;
+  const directLoaded = feeds.length - failedDirect;
+  const loaded = directLoaded + activeRemote;
+  const availableTotal = feeds.length + (remoteResult.sources.length ? remoteBoardNames.length : 0);
+  failedFeeds = availableTotal - loaded;
+
   allJobs = [...new Map([...cachedFeeds.values()].flat().map(job => [job.id, job])).values()];
   lastCheck = Date.now();
   const checkedAt = new Intl.DateTimeFormat('en-PH', { timeStyle: 'short', timeZone: 'Asia/Manila' }).format(lastCheck);
-  const loaded = feeds.length - failedFeeds;
 
-  byId('stat-feeds').textContent = `${loaded}/${feeds.length} live`;
+  byId('stat-feeds').textContent = `${loaded}/${availableTotal} live`;
   byId('stat-feeds-sub').textContent = `Updated ${checkedAt} PHT`;
 
   status.textContent = loaded
-    ? `${loaded} of ${feeds.length} feeds synced · ${checkedAt} PHT` + (failedFeeds ? ' · Partial feed failure' : ' · Auto-refresh every 5m')
+    ? `${loaded} of ${availableTotal} sources synced · ${checkedAt} PHT` +
+      (failedFeeds ? ' · Partial feed failure' : ' · Auto-refresh every 5m')
     : allJobs.length
       ? 'Live feeds unavailable. Showing cached results.'
       : 'Live feeds unavailable.';
