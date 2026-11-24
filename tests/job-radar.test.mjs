@@ -428,8 +428,8 @@ test('OTP login, cooldown enforcement, attempt lockout, cloud sync, and logout w
 });
 
 test('HTML bindings, expanded feeds, and RSS parser remain intact', async () => {
-  assert.equal(feeds.length, 35);
-  assert.equal(remoteBoardNames.length, 10);
+  assert.equal(feeds.length, 60);
+  assert.equal(remoteBoardNames.length, 12);
 
   const rssSample = `
     <rss><channel>
