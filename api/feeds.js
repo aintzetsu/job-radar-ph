@@ -8,6 +8,9 @@ export const REMOTE_BOARD_NAMES = [
   'We Work Remotely',
   'Himalayas',
   'Arbeitnow',
+  'Canva',
+  'Alorica',
+  'Ubisoft',
 ];
 
 function stripHtml(value) {
@@ -242,6 +245,38 @@ async function fetchArbeitnow(fetcher) {
   }));
 }
 
+async function fetchSmartRecruiters(companySlug, sourceName, fetcher) {
+  const data = await fetchJson(`https://api.smartrecruiters.com/v1/companies/${companySlug}/postings?limit=50`, fetcher);
+  return (data?.content || []).map(raw => {
+    const loc = raw.location || {};
+    const place = [loc.city, loc.region, loc.country?.toUpperCase()].filter(Boolean).join(', ');
+    const isRem = Boolean(loc.remote);
+    const refUrl = `https://jobs.smartrecruiters.com/${companySlug}/${raw.id}`;
+    return {
+      id: `sr:${companySlug}:${raw.id}`,
+      source: sourceName,
+      company: raw.company?.name || sourceName,
+      title: String(raw.name || '').trim(),
+      location: isRem ? `Remote · ${place || 'Global'}` : place || 'Location not listed',
+      country: loc.country ? String(loc.country).toUpperCase() : '',
+      workplace: isRem ? 'Remote' : 'Onsite / Hybrid',
+      kind: raw.typeOfEmployment?.label || '',
+      department: raw.department?.label || '',
+      date: toTimestamp(raw.releasedDate),
+      dateLabel: 'Published',
+      url: safeUrl(refUrl),
+      applyUrl: safeUrl(refUrl),
+      description: [
+        raw.department?.label ? `Department: ${raw.department.label}` : '',
+        raw.experienceLevel?.label ? `Experience: ${raw.experienceLevel.label}` : '',
+        place ? `Location: ${place}` : '',
+      ]
+        .filter(Boolean)
+        .join('\n'),
+    };
+  });
+}
+
 export async function collectRemoteBoards(fetcher = fetch) {
   const tasks = [
     ['Remotive', fetchRemotive],
@@ -251,6 +286,9 @@ export async function collectRemoteBoards(fetcher = fetch) {
     ['We Work Remotely', fetchWwr],
     ['Himalayas', fetchHimalayas],
     ['Arbeitnow', fetchArbeitnow],
+    ['Canva', f => fetchSmartRecruiters('Canva', 'Canva', f)],
+    ['Alorica', f => fetchSmartRecruiters('Alorica', 'Alorica', f)],
+    ['Ubisoft', f => fetchSmartRecruiters('Ubisoft2', 'Ubisoft', f)],
   ];
 
   const settled = await Promise.allSettled(tasks.map(([, fn]) => fn(fetcher)));
