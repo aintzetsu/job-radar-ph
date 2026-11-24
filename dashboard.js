@@ -656,6 +656,23 @@ function refreshIfDue() {
   if (!loading && Date.now() - lastCheck >= refreshInterval) refreshJobs();
 }
 
+async function allSettledBatched(items, limit, fn) {
+  const results = new Array(items.length);
+  let cursor = 0;
+  async function worker() {
+    while (cursor < items.length) {
+      const idx = cursor++;
+      try {
+        results[idx] = { status: 'fulfilled', value: await fn(items[idx]) };
+      } catch (reason) {
+        results[idx] = { status: 'rejected', reason };
+      }
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
+  return results;
+}
+
 async function refreshJobs() {
   if (loading) return;
   clearTimeout(refreshTimer);
@@ -668,7 +685,7 @@ async function refreshJobs() {
   if (!allJobs.length) renderResults();
 
   const [directResponses, remoteResult] = await Promise.all([
-    Promise.allSettled(feeds.map(feed => loadFeed(feed))),
+    allSettledBatched(feeds, 15, feed => loadFeed(feed)),
     loadRemoteBoards().catch(() => ({ sources: [], jobs: [] })),
   ]);
 
